@@ -3,7 +3,7 @@ import numpy as np
 import os
 from time import time
 from datetime import datetime
-
+from fake import g
 from motion import Motion
 
 WORKING_DIR = './captures'
