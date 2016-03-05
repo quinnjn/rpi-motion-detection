@@ -5,6 +5,7 @@ import pprint
 WORKING_DIR = './videos'
 CAPTURES_DIR = './captures'
 TIME_THRESHOLD_SECONDS = 5
+FPS = 5
 
 def mkdir(path):
  if not os.path.exists(path):
@@ -24,26 +25,24 @@ def getListOfCaptures():
 def getCaptureGroupings():
  groupings = {} 
  captures = getListOfCaptures()
- lastDate = ""
- lastTime = 0 
  lastGroup = ""
  for c in captures:
   (date, time, seconds) = c.split('.')[0].split('-')
  
-  if int(time) <= TIME_THRESHOLD_SECONDS + lastTime:
+  if lastGroup in groupings:
    groupings[lastGroup].append(c)
   else:
-   lastGroup = '-'.join([date, time])
+   lastGroup = '-'.join([date])
    groupings[lastGroup] = [c]
-  lastTime = int(time)
 
+ print groupings
  return groupings
 
 def lazyVideoWriter(group, frame):
  path = filepath(group) + '.avi'
  (h,w,layers) = frame.shape
  fourcc = cv2.cv.CV_FOURCC(*'MJPG')
- return cv2.VideoWriter(path, fourcc, 1, (w, h))
+ return cv2.VideoWriter(path, fourcc, FPS, (w, h))
 
 mkdir(WORKING_DIR)
 
